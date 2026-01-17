@@ -1,0 +1,60 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+html,body{
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#frame{
+    border: 1px solid black;
+
+    height: 30%;
+    width: 30%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#button-container{
+
+    border:3px solid black;
+    border-radius: 8px;
+
+    width: 40%;
+    height: 20%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button{
+    font: "Noto Sans";
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+    border-radius: 5px;
+
+    background-color: black;
+    color: white;
+
+    transition: height 0.2s ease;
+    transition: width 0.2s ease;
+}
+
+button:hover{
+    height: 90%;
+    width: 98%;
+}
