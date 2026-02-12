@@ -1,3 +1,0 @@
-Hello World!!
-I am done reading this file.
-Doing this is I/O bound or I/O heavy operation code. 
