@@ -1,0 +1,1 @@
+Javascript is currently reading this text file.
