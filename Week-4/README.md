@@ -273,7 +273,7 @@ setTimeoutPromisified(1000).then(
 
 ```js
 setTimeoutPromisified(1000)
-    .then(function () {
+    .then(function () { 
         console.log('RUnning after 1000ms');
         return setTimeoutPromisified(3000)
     })
