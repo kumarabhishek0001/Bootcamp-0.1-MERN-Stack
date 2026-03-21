@@ -129,3 +129,13 @@ app.get('/notes', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
+app.get('/signup', (req, res) => {
+  res.sendFile('D:\\Bootcamp-0.1-MERN-Stack\\Week-9\\frontend\\signup.html')
+})
+
+
+app.get('/signin', (req, res) => {
+  res.sendFile('D:\\Bootcamp-0.1-MERN-Stack\\Week-9\\frontend\\signin.html')
+})

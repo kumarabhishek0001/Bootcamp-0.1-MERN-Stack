@@ -25,6 +25,10 @@
             // send note to the backend
             await axios.post('http://localhost:3000/notes',{
                 note: document.getElementById('inputNote').value
+            }, {
+                headers: {
+                    token : localStorage.getItem("token")
+                }
             });
 
 
@@ -53,7 +57,11 @@
             // now since we are sending a file to the frontend and axios is to be run in frontend 
             // we cannot just npm install we need to send the code of axios along with my forntend file
 
-            const response = await axios.get('http://localhost:3000/notes');
+            const response = await axios.get('http://localhost:3000/notes',{
+                headers:{
+                    token : localStorage.getItem("token")
+                }
+            });
 
             // say you forgot to add this line
             // and you have an element with id userNotes -> JS does not throw an error
@@ -66,7 +74,7 @@
 
             for(let i=0; i<userNotes.length; i++){
                 const noteNote = document.createElement('div');
-                noteNote.innerHTML = userNotes[i];
+                noteNote.innerHTML = userNotes[i].note;
                 noteNote.setAttribute("style", "border:2px solid black; padding: 10px")
                 document.getElementById('notes').appendChild(noteNote);
             }
