@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; padding: 0px 100px;">
+
+        <div id="notes">
+            Loading....
+        </div>
+
+        <div>
+            <input type="text" placeholder="Enter your note here" id="inputNote">
+            <button onclick="addTodo()">Create</button>
+        </div>
+    </div>
+
+    <script>
+
+        async function addTodo(){
+            // send note to the backend
+            await axios.post('http://localhost:3000/notes',{
+                note: document.getElementById('inputNote').value
+            });
+
+
+            // append note in the frontend
+            const noteNote = document.createElement('div');
+            noteNote.innerHTML = document.getElementById('inputNote').value;
+            noteNote.setAttribute("style", "border:2px solid black; padding: 10px");
+            document.getElementById('notes').appendChild(noteNote);
+
+
+            // empty the input box
+            document.getElementById('inputNote').value = ""
+
+
+        }
+
+        async function getTodos(){
+            // method-1 using fetch lib
+
+            // const res = await fetch('http://localhost:3000/notes');
+            // const json = await res.json();
+            // console.log(json.notes);
+
+            // using axios
+            // axios is not avaialable by default, it is an external dependency.
+            // now since we are sending a file to the frontend and axios is to be run in frontend 
+            // we cannot just npm install we need to send the code of axios along with my forntend file
+
+            const response = await axios.get('http://localhost:3000/notes');
+
+            // say you forgot to add this line
+            // and you have an element with id userNotes -> JS does not throw an error
+            // it just simply returns the element with the same id
+            const userNotes = response.data.notes;
+
+            console.log(response.data.notes);
+
+            document.getElementById('notes').innerHTML = "";
+
+            for(let i=0; i<userNotes.length; i++){
+                const noteNote = document.createElement('div');
+                noteNote.innerHTML = userNotes[i];
+                noteNote.setAttribute("style", "border:2px solid black; padding: 10px")
+                document.getElementById('notes').appendChild(noteNote);
+            }
+        
+        }
+
+        getTodos();
+    </script>
+</body>
+</html>
