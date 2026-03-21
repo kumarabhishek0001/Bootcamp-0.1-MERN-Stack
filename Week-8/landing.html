@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+
+    <script>
+        async function add() {
+            const firstNumber = document.getElementById("first").value;
+            console.log(firstNumber);
+
+            const secondNumber = document.getElementById("second").value;
+            console.log(secondNumber);
+
+            // fetch by default makes GET request
+            const res = await fetch("http://localhost:3000/sum?a=" + firstNumber + "&b=" + secondNumber);
+            const json = await res.json()
+
+            document.getElementById("response").innerHTML = json.ans;
+        }
+
+        async function sub() {
+
+            const firstNumber = document.getElementById("first").value;
+            console.log(firstNumber);
+
+            const secondNumber = document.getElementById("second").value;
+            console.log(secondNumber);
+
+
+            const res = await fetch("http://localhost:3000/sub", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "a": firstNumber,
+                    "b": secondNumber
+                })
+            },
+            )
+
+            const json = await res.json();
+            document.getElementById("response").innerHTML = json.answer;
+
+        }
+    
+        async function multiply(){
+            const a = document.getElementById("first").value;
+            const b = document.getElementById("second").value;
+
+            const res = await fetch("http://localhost:3000/mul",{
+                method : "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "a" : a,
+                    "b" : b
+                })
+            })
+            const json = await res.json();
+
+            document.getElementById("response").innerHTML = json.answer;
+        }
+    
+        async function div(){
+            const a = document.getElementById("first").value;
+            const b = document.getElementById("second").value;
+
+            const res = await fetch("http://localhost:3000/div/?a=" + a + "&b=" + b);
+            const res1 = await res.text();
+
+            document.getElementById("response").innerHTML = res1;
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Welcome to calculator app</h1>
+    <input id="first" type="text" placeholder="First number">
+    <input id="second" type="text" placeholder="Second number">
+
+    <button onclick="add()">Add</button>
+    <button onclick="sub()">Subtract</button>
+    <button onclick="multiply()">multiply</button>
+    <button onclick="div()">Divide</button>
+
+    <div id="response"></div>
+</body>
+
+</html>

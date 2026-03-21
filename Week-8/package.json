@@ -1,0 +1,16 @@
+{
+  "name": "week-8",
+  "version": "1.0.0",
+  "description": "RESPONSE -> event-stream/html/json/plain-text.\r RESPONSE HEADER, REQUEST HEADER",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "live-server": "^1.2.2"
+  }
+}
