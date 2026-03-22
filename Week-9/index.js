@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const app = express()
 const port = 3000
 
+const {authMiddleware} = require('./middleware')
 // used to read the body that is sent in the body in request-> req.body -> this is required
 app.use(express.json())
 
@@ -68,26 +69,8 @@ app.get('/', (req, res) => {
 })
 
 // backend endpoint
-app.post('/notes', (req,res) => {
-
-  const token = req.headers.token;
-  if(!token){
-    res.status(403).send({
-      message: "Unauthorized user"
-    })
-
-    return; 
-  }
-
-  const decoded = jwt.verify(token, "harkirat123");
-  const username = decoded.username;
-
-  if(!username){
-    res.status(403).json({
-      message: "malformed token"
-    })
-  }
-
+app.post('/notes', authMiddleware, (req,res) => {
+  const username = req.username;
   const note = req.body.note;
 
   notes.push({note, username});
@@ -98,26 +81,9 @@ app.post('/notes', (req,res) => {
 })
 
 // backend endpoint
-app.get('/notes', (req, res) => {
+app.get('/notes', authMiddleware, (req, res) => {
 
-  const token = req.headers.token;
-  if(!token){
-    res.status(403).send({
-      message: "Unauthorized user"
-    })
-
-    return; 
-  }
-
-  const decoded = jwt.verify(token, "harkirat123");
-  const username = decoded.username;
-
-  if(!username){
-    res.status(403).json({
-      message: "malformed token"
-    })
-  }
-
+  const username = req.username;
   const usernote = notes.filter(note => note.username === username);
 
   res.json({
