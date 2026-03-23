@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Archives</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="homepage_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- <script defer src="homepage_Script.js"></script> -->
+</head>
+
+<body>
+
+    <!-- Search Section -->
+    <div class="operations">
+        <h1>What's your favorite movie</h1>
+
+        <div class="search">
+            <input type="text" placeholder="Movie name" id="search-input">
+            <button onclick="search()" id="search-button">Find</button>
+        </div>
+    </div>
+
+    <!-- Movies Grid -->
+    <div class="movies-container">
+
+        <!-- Card -->
+        <div class="card">
+            <div class="image-container"></div>
+
+            <div class="movie-details">
+                <h2>Title</h2>
+                <p>Overview</p>
+                <p>Release Date</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        async function search(){
+            const movieName = document.getElementById('search-input').value;
+
+            if(!movieName){
+                alert('Please enter a movie name');
+                return;
+            }
+            
+            const options = {
+                method: 'GET',
+                url: 'http://localhost:3000/getmovie/' + encodeURIComponent(movieName),
+            }
+
+            console.log(options.url)
+
+            const response = await axios.request(options)
+            console.log(response.data);
+        }
+
+        
+    </script>
+</body>
+</html>
