@@ -93,10 +93,11 @@ body {
 /* 🔹 Details */
 .movie-details h2 {
     font-size: 18px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .movie-details p {
     font-size: 14px;
     color: #ccc;
+    margin-bottom: 7px;
 }

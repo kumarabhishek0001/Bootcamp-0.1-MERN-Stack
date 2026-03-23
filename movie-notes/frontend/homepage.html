@@ -36,7 +36,7 @@
     <div class="movies-container">
 
         <!-- Card -->
-        <div class="card">
+        <!-- <div class="card">
             <div class="image-container"></div>
 
             <div class="movie-details">
@@ -44,11 +44,65 @@
                 <p>Overview</p>
                 <p>Release Date</p>
             </div>
-        </div>
+        </div> -->
     </div>
 
 
     <script>
+
+        function addMovieData(movieData){
+            let movieDataArr = movieData.results;
+            // console.log(movieDataArr)
+
+            movieDataArr = movieDataArr.filter(movie => movie.original_language === 'en') 
+
+            movieDataArr.forEach(element => {
+                const movieDetails = document.createElement('div');
+                movieDetails.classList.add('movie-details');
+
+                // creating title and adding text
+                const movieDetailsTitle = document.createElement('h2');
+                movieDetailsTitle.innerText = element.original_title;
+
+                // creating overview and adding text
+                const movieDetailsOverview = document.createElement('p');
+                movieDetailsOverview.innerText = element.overview.slice(0,80)
+
+                // creating release and adding text
+                const movieDetailsReleaseDate = document.createElement('p');
+                movieDetailsReleaseDate.innerText = element.release_date
+
+                // appending in movie details
+                movieDetails.appendChild(movieDetailsTitle)
+                movieDetails.appendChild(movieDetailsOverview)
+                movieDetails.appendChild(movieDetailsReleaseDate)
+
+                
+
+                // creating image container
+                const imageContainer = document.createElement('div');
+                imageContainer.classList.add('image-container');
+
+                // creating card
+                const card = document.createElement('div');
+                card.classList.add('card')
+                
+
+                
+                // appending 
+                card.appendChild(imageContainer)
+                
+                card.appendChild(movieDetails)
+
+                // final append 
+                const finalDiv = document.getElementsByClassName('movies-container')[0];
+                finalDiv.appendChild(card)
+
+
+            });
+
+        }
+
         async function search() {
             const movieName = document.getElementById('search-input').value;
 
@@ -61,19 +115,19 @@
 
                 const showError = document.getElementsByClassName('show-error')[0]
                 showError.style.display = 'none'
-                
+
                 const response = await axios.get(
                     'http://localhost:3000/getmovie/' + encodeURIComponent(movieName)
                 );
 
                 
 
-                console.log(response.data);
+                addMovieData(response.data);
 
                 // TODO: render movies here
 
             } catch (err) {
-                console.log("Frontend error:", err.message);
+                console.log(err);
 
                 const showError = document.getElementsByClassName('show-error')[0]
                 showError.style.display = 'block'
