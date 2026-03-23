@@ -18,6 +18,10 @@
 
 <body>
 
+    <div class="show-error">
+        <p>Network is busy. Please try again!</p>
+    </div>
+
     <!-- Search Section -->
     <div class="operations">
         <h1>What's your favorite movie</h1>
@@ -54,9 +58,15 @@
             }
 
             try {
+
+                const showError = document.getElementsByClassName('show-error')[0]
+                showError.style.display = 'none'
+                
                 const response = await axios.get(
                     'http://localhost:3000/getmovie/' + encodeURIComponent(movieName)
                 );
+
+                
 
                 console.log(response.data);
 
@@ -65,7 +75,8 @@
             } catch (err) {
                 console.log("Frontend error:", err.message);
 
-                alert("Network is busy, please try later");
+                const showError = document.getElementsByClassName('show-error')[0]
+                showError.style.display = 'block'
             }
         }
 
