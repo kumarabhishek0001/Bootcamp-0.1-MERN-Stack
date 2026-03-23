@@ -45,26 +45,32 @@
 
 
     <script>
-        async function search(){
+        async function search() {
             const movieName = document.getElementById('search-input').value;
 
-            if(!movieName){
-                alert('Please enter a movie name');
+            if (!movieName.trim()) {
+                alert("Enter a movie name");
                 return;
             }
-            
-            const options = {
-                method: 'GET',
-                url: 'http://localhost:3000/getmovie/' + encodeURIComponent(movieName),
+
+            try {
+                const response = await axios.get(
+                    'http://localhost:3000/getmovie/' + encodeURIComponent(movieName)
+                );
+
+                console.log(response.data);
+
+                // TODO: render movies here
+
+            } catch (err) {
+                console.log("Frontend error:", err.message);
+
+                alert("Network is busy, please try later");
             }
-
-            console.log(options.url)
-
-            const response = await axios.request(options)
-            console.log(response.data);
         }
 
-        
+
     </script>
 </body>
+
 </html>

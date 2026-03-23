@@ -1,6 +1,9 @@
+const https = require('https');
+const agent = new https.Agent({
+  keepAlive: false   // ⭐ disables socket reuse
+});
 require('dotenv').config()
 const apiKey = process.env.KEY
-console.log(apiKey)
 const express = require('express')
 const chalk = require('chalk')
 const axios = require('axios')
@@ -23,6 +26,7 @@ app.get('/getmovie/:name', async (req, res) => {
     const response = await axios.get(
       'https://api.themoviedb.org/3/search/movie',
       {
+        httpsAgent: agent,
         params: {
           query: movieName,
           include_adult: false,
@@ -39,8 +43,12 @@ app.get('/getmovie/:name', async (req, res) => {
     res.json(response.data);
 
   } catch (err) {
-    console.log("REAL ERROR:", err.response?.data || err.message);
-    res.status(500).send('Error');
+    console.log("ERROR:", err.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Network is busy, please try again"
+    });
   }
 });
 
