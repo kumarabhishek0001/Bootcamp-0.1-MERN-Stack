@@ -132,7 +132,39 @@ app.post('/organization', authmiddleware, (req, res) => {
 })
 
 app.post('/add-member-to-organization', authMiddleware, (req, res) => {
+    const userId = req.userId;
+    const organizationId = req.body.organizationId;
+    const memberUserUsername = req.body.memberUserUsername;
+
+    const organization = organizations.find(org => org.id === organizationId);
+    if(!organization){
+        res.status(411).json({
+            message: "orgainization does NOT exist"
+        })
+        return 
+    }
+    if(organization.admin !== userId){
+        res.status(411).json({
+            message: "Unauthorized action"
+        })
+
+        return 
+    }
     
+    const memberUser = users.find(u => u.username === memberUserUsername);
+
+    if(!memberUser){
+        res.status(411).json({
+            message: "user with this username does not exist"
+        })
+        return
+    }
+
+    organization.members.push(memberUser.id);
+
+    res.json({
+        message: "member user added"
+    })
 })
 
 app.post('/board', (req, res) => {
