@@ -3,7 +3,11 @@
 // boards
 // issues
 const express = require('express');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const {authmiddleware} = require('./middleware');
+const { authMiddleware } = require('../Week-9/middleware');
+
+
 let USER_ID = 1;
 let ORGANIZATION_ID = 1;
 let BOARD_ID = 1;
@@ -105,15 +109,30 @@ const username = req.body.username;
     res.json({
         token
     })
+
+})
+
+// AUTHENTICATED ROUTES - MIDDLEWARE
+app.post('/organization', authmiddleware, (req, res) => {
+    const userId = req.userId;
+
+    organizations.push[{
+    id: ORGANIZATION_ID++,
+    title: req.body.title,
+    description: req.body.title,
+    admin: userId,
+    members: []
+    }]
+
+    res.json({
+        message: "organization created",
+        id: ORGANIZATION_ID-1,
+    })
     
 })
 
-app.post('/organization', (req, res) => {
+app.post('/add-member-to-organization', authMiddleware, (req, res) => {
     
-})
-
-app.post('/add-member-to-organization', (req, res) => {
-
 })
 
 app.post('/board', (req, res) => {
