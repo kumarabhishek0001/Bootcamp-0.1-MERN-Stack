@@ -2,26 +2,34 @@ const jwt = require('jsonwebtoken');
 
 
 function authMiddleWare(req, res, next){
-    token = req.headers.token;
+    const token = req.headers.token;
 
-    const decoded = jwt.verify(token, 'abhishek123');
-    const userId = decoded.userId;
-
-    if(userId){
-        // attaching userId in request
-        req.userId;
-        next();
+    if (!token) {
+        return res.status(403).json({
+            message: "No token provided"
+        });
     }
 
-    else{
-        req.status(403).json({
-            message: "malformed token"
-        })
-    }
+    try {
+        const decoded = jwt.verify(token, 'abhishek123');
+        const userId = decoded.userId;
 
-    
+        if (userId) {
+            // attaching userId in request
+            req.userId = userId;
+            next();
+        } else {
+            return res.status(403).json({
+                message: "Malformed token"
+            });
+        }
+    } catch (error) {
+        return res.status(403).json({
+            message: "Invalid token"
+        });
+    }
 }
 
-modules.exports = {
+module.exports = {
     authMiddleWare: authMiddleWare
 }
