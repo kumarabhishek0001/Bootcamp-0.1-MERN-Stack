@@ -70,7 +70,25 @@ app.post('/signin', (req, res) => {
 })
 
 app.post('/addTodo', authMiddleware, (req, res) => {
-    
+    const userId = req.userId;
+    // console.log(chalk.red(userId));
+    const title = req.body.title;
+    // console.log(title);
+    const description = req.body.description;
+    // console.log(description);
+
+    const userTodo = {
+        todoId: CURRENT_TODO_ID++,
+        title,
+        description,
+        userId
+    }
+
+    TODOS.push(userTodo);
+
+    res.send(TODOS)
+
+
 })
 
 // READ endpoints
