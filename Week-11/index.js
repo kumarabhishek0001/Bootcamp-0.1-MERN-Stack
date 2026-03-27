@@ -2,6 +2,8 @@ const chalk = require('chalk');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const { authMiddleware } = require('./middleware') ;
+
 const express = require('express');
 const app = express();
 
@@ -57,14 +59,19 @@ app.post('/signin', (req, res) => {
         });
     }
 
-    console.log(process.env.JWT_SECRET)
-    const token = jwt.sign(username, process.env.JWT_SECRET)
+    // console.log(process.env.JWT_SECRET)
+    const userId = checkCredentials.userId;
+    const token = jwt.sign({userId}, process.env.JWT_SECRET)
 
     res.json({
-        token
+        token,
+        credentials: checkCredentials
     })
 })
-// app.post('todo')
+
+app.post('/addTodo', authMiddleware, (req, res) => {
+    
+})
 
 // READ endpoints
 // app.get('/todos')
