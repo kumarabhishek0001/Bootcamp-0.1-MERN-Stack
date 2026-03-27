@@ -45,14 +45,18 @@
                 <p>Release Date</p>
             </div>
         </div> -->
+        
     </div>
 
 
     <script>
 
         function addMovieData(movieData){
+
+            document.getElementsByClassName('movies-container')[0].innerHTML = "";
+           
             let movieDataArr = movieData.results;
-            // console.log(movieDataArr)
+            console.log(movieDataArr)
 
             movieDataArr = movieDataArr.filter(movie => movie.original_language === 'en') 
 
@@ -83,6 +87,12 @@
                 const imageContainer = document.createElement('div');
                 imageContainer.classList.add('image-container');
 
+                const moviePoster = document.createElement('img');
+                const moviePosterPath = element.poster_path;
+                moviePoster.setAttribute('src', 'https://image.tmdb.org/t/p/w500'+moviePosterPath)
+
+                imageContainer.appendChild(moviePoster)
+
                 // creating card
                 const card = document.createElement('div');
                 card.classList.add('card')
@@ -98,7 +108,7 @@
                 const finalDiv = document.getElementsByClassName('movies-container')[0];
                 finalDiv.appendChild(card)
 
-
+                
             });
 
         }
