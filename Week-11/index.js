@@ -46,7 +46,23 @@ app.post('/signup', (req, res) => {
 
 app.post('/signin', (req, res) => {
 
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const checkCredentials = USERS.find(user => user.username === username && user.password === password);
     
+    if(!checkCredentials){
+        return res.status(401).json({
+            message: "Invalid Credentials"
+        });
+    }
+
+    console.log(process.env.JWT_SECRET)
+    const token = jwt.sign(username, process.env.JWT_SECRET)
+
+    res.json({
+        token
+    })
 })
 // app.post('todo')
 
