@@ -124,13 +124,61 @@ app.post('/addTodo', authMiddleware, async (req, res) => {
 })
 
 // READ endpoints
-// app.get('/todos')
+// AUTHENTICATED ENDPOINT
+
+app.get('/todos', authMiddleware, async (req, res) => {
+    const userId = req.userId;
+
+    const userTodos = await todoModel.find({
+        userId
+    })
+
+    if(!userTodos){
+        return res.status(404).json({
+            message: "No data found against the user"
+        })
+    }
+
+    res.status(200).json({
+        userTodos
+    })
+
+})
 
 // UPDATE endpoints
 // app.put('/todo/:todoId')
 
 // DELETE endpoints
-// app.delete('/todo/:todoId')
+// AUTHENTICATED ENDPOINT
+app.delete('/todo/:todoId', authMiddleware, async(req, res) => {
+    const userId = req.userId;
+    // console.log("user ID: ",userId);
+
+    const todoId = req.params.todoId;
+    // console.log("todoId: ", todoId);
+
+    const todo = await todoModel.findById({
+        _id: todoId
+    })
+
+    // console.log("todo found: ", todo)
+
+    if(!todo){
+        return res.status(404).json({
+            message: "Invalid todo"
+        })
+    }
+
+    if(todo.userId == userId){
+        // console.log("id to delete: ", todo._id);
+        const remove = await todoModel.findByIdAndDelete({_id: todo._id});
+        // console.log("remove: ", remove);
+    }
+
+    res.status(200).json({
+        message: "successfull"
+    })
+})
 
 app.listen(PORT, () => {
     console.log("App listening to "+chalk.green('http://localhost:'+PORT))
