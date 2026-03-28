@@ -34,6 +34,8 @@ app.post('/signup', async(req, res) => {
         password
     })
 
+    
+
     // IF USER ALREADY EXISTS IN DB
     if(userExists){
         return res.status(422).json({
@@ -48,23 +50,34 @@ app.post('/signup', async(req, res) => {
 
     const newUser = await userModel.create(userData);
 
-    res.status(201).json({
-        id: newUser._id,
-        username: newUser.username,
-        password: newUser.password,
-        createdOn: newUser.createdOn
-    })
+    // res.status(201).json({
+    //     id: newUser._id,
+    //     username: newUser.username,
+    //     password: newUser.password,
+    //     createdOn: newUser.createdOn
+    // })
 
-    ;
+    res.status(201).json({
+        id: newUser._id
+    });
 })
 
 
-app.post('/signin', (req, res) => {
+app.post('/signin', async (req, res) => {
 
     const username = req.body.username;
-    const password = req.body.password;
+    
 
-    const checkCredentials = USERS.find(user => user.username === username && user.password === password);
+    const password = req.body.password;
+    
+
+    // CHECK CREDENTIALS FROM THE DB
+    const checkCredentials = await userModel.findOne({
+        username,
+        password
+    });
+
+    
     
     if(!checkCredentials){
         return res.status(401).json({
@@ -73,12 +86,13 @@ app.post('/signin', (req, res) => {
     }
 
     // console.log(process.env.JWT_SECRET)
-    const userId = checkCredentials.userId;
+    const userId = checkCredentials._id;
     const token = jwt.sign({userId}, process.env.JWT_SECRET)
 
     res.json({
         token,
-        credentials: checkCredentials
+        // credentials: checkCredentials,
+        message: "success"
     })
 })
 
