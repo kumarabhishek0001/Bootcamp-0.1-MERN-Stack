@@ -97,24 +97,28 @@ app.post('/signin', async (req, res) => {
 })
 
 // AUTHENTICATED ENDPOINT
-app.post('/addTodo', authMiddleware, (req, res) => {
+app.post('/addTodo', authMiddleware, async (req, res) => {
     const userId = req.userId;
     // console.log(chalk.red(userId));
     const title = req.body.title;
     // console.log(title);
     const description = req.body.description;
     // console.log(description);
+    const priority = req.body.priority
 
     const userTodo = {
-        todoId: CURRENT_TODO_ID++,
         title,
         description,
+        priority,
         userId
     }
 
-    TODOS.push(userTodo);
+    const newTodo = await todoModel.create(userTodo);
+    // console.log(newTodo);
 
-    res.send(TODOS)
+    res.json({
+        message: "success"
+    })
 
 
 })
