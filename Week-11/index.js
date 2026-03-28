@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 })
 
 // CREATE endpoints
-app.post('/signup', async(req, res) => {
+app.post('/signup', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
@@ -34,10 +34,10 @@ app.post('/signup', async(req, res) => {
         password
     })
 
-    
+
 
     // IF USER ALREADY EXISTS IN DB
-    if(userExists){
+    if (userExists) {
         return res.status(422).json({
             message: "User already exists"
         })
@@ -66,10 +66,10 @@ app.post('/signup', async(req, res) => {
 app.post('/signin', async (req, res) => {
 
     const username = req.body.username;
-    
+
 
     const password = req.body.password;
-    
+
 
     // CHECK CREDENTIALS FROM THE DB
     const checkCredentials = await userModel.findOne({
@@ -77,9 +77,9 @@ app.post('/signin', async (req, res) => {
         password
     });
 
-    
-    
-    if(!checkCredentials){
+
+
+    if (!checkCredentials) {
         return res.status(401).json({
             message: "Invalid Credentials"
         });
@@ -87,7 +87,7 @@ app.post('/signin', async (req, res) => {
 
     // console.log(process.env.JWT_SECRET)
     const userId = checkCredentials._id;
-    const token = jwt.sign({userId}, process.env.JWT_SECRET)
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET)
 
     res.json({
         token,
@@ -133,7 +133,7 @@ app.get('/todos', authMiddleware, async (req, res) => {
         userId
     })
 
-    if(!userTodos){
+    if (!userTodos) {
         return res.status(404).json({
             message: "No data found against the user"
         })
@@ -146,11 +146,42 @@ app.get('/todos', authMiddleware, async (req, res) => {
 })
 
 // UPDATE endpoints
-// app.put('/todo/:todoId')
+app.put('/todo/:todoId', authMiddleware, async (req, res) => {
+    const userId = req.userId;
+    const todoId = req.params.todoId;
+
+    const todo = await todoModel.findById(todoId);
+
+    if (!todo) {
+        return res.status(404).send("Todo not found");
+    }
+
+    if (todo.userId.toString() !== userId) {
+        return res.status(403).send("Unauthorized");
+    }
+
+    const { title, description, priority } = req.body;
+
+    const toUpdate = {};
+
+    if (title !== undefined) toUpdate.title = title;
+    if (description !== undefined) toUpdate.description = description;
+    if (priority !== undefined) toUpdate.priority = priority;
+
+    const newTodo = await todoModel.findByIdAndUpdate(
+        todoId,
+        toUpdate,
+        { new: true }
+    );
+
+    // console.log('Updated:', newTodo);
+
+    res.send('success');
+})
 
 // DELETE endpoints
 // AUTHENTICATED ENDPOINT
-app.delete('/todo/:todoId', authMiddleware, async(req, res) => {
+app.delete('/todo/:todoId', authMiddleware, async (req, res) => {
     const userId = req.userId;
     // console.log("user ID: ",userId);
 
@@ -163,15 +194,15 @@ app.delete('/todo/:todoId', authMiddleware, async(req, res) => {
 
     // console.log("todo found: ", todo)
 
-    if(!todo){
+    if (!todo) {
         return res.status(404).json({
             message: "Invalid todo"
         })
     }
 
-    if(todo.userId == userId){
+    if (todo.userId == userId) {
         // console.log("id to delete: ", todo._id);
-        const remove = await todoModel.findByIdAndDelete({_id: todo._id});
+        const remove = await todoModel.findByIdAndDelete({ _id: todo._id });
         // console.log("remove: ", remove);
     }
 
@@ -181,5 +212,5 @@ app.delete('/todo/:todoId', authMiddleware, async(req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log("App listening to "+chalk.green('http://localhost:'+PORT))
+    console.log("App listening to " + chalk.green('http://localhost:' + PORT))
 })
