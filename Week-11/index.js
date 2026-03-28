@@ -13,12 +13,6 @@ app.use(express.json());
 const PORT = 3002;
 
 
-let CURRENT_USER_ID = 1;
-let CURRENT_TODO_ID = 1;
-
-let USERS = [];
-let TODOS = [];
-
 app.get('/', (req, res) => {
     res.send('Hello world!')
 })
