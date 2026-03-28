@@ -1,8 +1,10 @@
 const chalk = require('chalk');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-const { authMiddleware } = require('./middleware') ;
+const { authMiddleware } = require('./middleware');
+const { todoModel, userModel } = require('./models');
 
 const express = require('express');
 const app = express();
@@ -22,12 +24,17 @@ app.get('/', (req, res) => {
 })
 
 // CREATE endpoints
-app.post('/signup', (req, res) => {
+app.post('/signup', async(req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    const userExists = USERS.find(user => user.username === username);
+    // SEARCH IN DB
+    const userExists = await userModel.findOne({
+        username,
+        password
+    })
 
+    // IF USER ALREADY EXISTS IN DB
     if(userExists){
         return res.status(422).json({
             message: "User already exists"
@@ -35,14 +42,20 @@ app.post('/signup', (req, res) => {
     }
 
     const userData = {
-        userId: CURRENT_USER_ID++,
         username,
         password
     }
 
-    USERS.push(userData);
+    const newUser = await userModel.create(userData);
 
-    res.status(201).send(USERS);
+    res.status(201).json({
+        id: newUser._id,
+        username: newUser.username,
+        password: newUser.password,
+        createdOn: newUser.createdOn
+    })
+
+    ;
 })
 
 
@@ -69,6 +82,7 @@ app.post('/signin', (req, res) => {
     })
 })
 
+// AUTHENTICATED ENDPOINT
 app.post('/addTodo', authMiddleware, (req, res) => {
     const userId = req.userId;
     // console.log(chalk.red(userId));
