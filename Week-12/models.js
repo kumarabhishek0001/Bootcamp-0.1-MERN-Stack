@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-mongoose.connect('mongodb+srv://kumarabhishek18jha12_db_user:BYBZ1e9opgMnn7sJ@cluster0.drirtsd.mongodb.net/trello-week-12')
+mongoose.connect('')
 
 // models
 const userSchema = mongoose.Schema({
