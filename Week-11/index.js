@@ -1,3 +1,4 @@
+const path = require('path');
 const chalk = require('chalk');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
@@ -14,7 +15,7 @@ const PORT = 3002;
 
 
 app.get('/', (req, res) => {
-    res.send('Hello world!')
+    res.sendFile(path.join(__dirname + '/frontend/signup.html'))
 })
 
 // CREATE endpoints
