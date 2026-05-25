@@ -1,0 +1,3 @@
+- strongly type vs loosly typed
+- C++/JAVA VS python/js
+- javascript -> make strongly type -> typescript
